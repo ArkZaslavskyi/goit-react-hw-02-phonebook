@@ -16,6 +16,11 @@ class App extends Component {
   }
 
   addContact = (name, number) => {
+    if (this.isContact(name)) {
+      alert(`"${name}" is already in contacts.`)
+      return;
+    }
+
     const contact = {
       id: nanoid(),
       name,
@@ -27,6 +32,12 @@ class App extends Component {
     }));
   }
 
+  isContact = name => {
+    const { contacts } = this.state;
+
+    return contacts.find(contact => contact.name === name);
+  };
+
   deleteContact = contactId => {
     const { contacts } = this.state;
 
@@ -35,8 +46,8 @@ class App extends Component {
     
     this.setState({
       contacts: [...newList],
-    })
-  }
+    });
+  };
 
   handleInput = ({ target: { name, value } }) => {
       // console.log(name);
