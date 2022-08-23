@@ -6,13 +6,9 @@ export const ListItem = styled.li`
 
     padding: 12px 8px;
 
-    /* :not(:first-of-type){
-        margin-top: 8px;
-    } */
-
-    /* :not(:last-of-type) {
+    :not(:last-of-type) {
         border-bottom: 1px dotted  gray;
-    } */
+    }
 `;
 
 export const ContactName = styled.span`

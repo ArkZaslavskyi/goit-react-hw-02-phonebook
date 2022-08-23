@@ -1,4 +1,5 @@
-import {FilterField, FilterData } from './Filter.styled.js';
+import PropTypes from "prop-types";
+import { FilterField, FilterData } from './Filter.styled.js';
 
 const Filter = ({ filter, onInput }) => {
 
@@ -15,6 +16,11 @@ const Filter = ({ filter, onInput }) => {
             </FilterField>
         </>
     )
+};
+
+Filter.propTypes = {
+    filter: PropTypes.string.isRequired,
+    onInput: PropTypes.func.isRequired,
 };
 
 export default Filter; 

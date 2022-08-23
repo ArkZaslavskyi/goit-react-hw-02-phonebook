@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
 export const Contacts = styled.ul`
-    max-height: 20vh;
+    max-height: 24vh;
     overflow-y: auto;
 
     margin-top: 16px;

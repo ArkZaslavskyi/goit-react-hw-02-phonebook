@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'; 
 import Contact from "components/Contact";
 import {Contacts}  from './ContactList.styled.js'
 
@@ -19,3 +20,14 @@ const ContactList = ({ contacts, onDelete }) => {
 )};
 
 export default ContactList;
+
+ContactList.propTypes = {
+    contacts: PropTypes.arrayOf(
+        PropTypes.exact({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        number: PropTypes.string.isRequired,
+    }).isRequired
+    ).isRequired,
+    onDelete: PropTypes.func.isRequired,
+};
