@@ -1,14 +1,18 @@
 import React, { Component } from "react";
 import { nanoid } from "nanoid";
-import Box from "./Box";
+
+import Form from "components/Form";
+import Filter from "components/Filter";
+import ContactList from "components/ContactList";
+import Box from "components/Box";
+
 import initialContacts from 'contacts.json';
+import { PhonebookTitle, PnonebookSubtitle } from "./App.styled";
 
 class App extends Component {
   state = {
     contacts: initialContacts,
     filter: '',
-    name: '',
-    number: '',
   }
 
   addContact = (name, number) => {
@@ -23,92 +27,65 @@ class App extends Component {
     }));
   }
 
-  handleSubmit = e => {
-    e.preventDefault();
+  deleteContact = contactId => {
+    const { contacts } = this.state;
 
-    this.addContact(this.state.name, this.state.number);
-    this.resetForm();
-  };
-
-  resetForm = () => {
+    const newList = contacts.filter(contact =>
+      contact.id !== contactId);
+    
     this.setState({
-      name: '',
-      number: '',
+      contacts: [...newList],
     })
-  };
+  }
 
   handleInput = ({ target: { name, value } }) => {
-    // console.log(name);
-    // console.log(value);
-    this.setState({
-      [name]: value,
-    });
+      // console.log(name);
+      // console.log(value);
+      this.setState({
+          [name]: value,
+      });
   };
   
-  render() {
+  getFilteredContacts = () => {
+    const { contacts, filter } = this.state;
+    const normalizeFilter = filter.trim().toLowerCase();
 
-    const filteredContacts =
-      this.state.contacts.filter(contact =>
+    return contacts.filter(contact =>
         contact.name
           .toLowerCase()
-          .includes(
-            this.state.filter
-              .trim()
-              .toLowerCase()));
+          .includes(normalizeFilter));
+  }
+
+  render() {
+
+    const { filter } = this.state;
+    const filteredContacts = this.getFilteredContacts();
 
     return (
       
-      <div>
-        <h1>Phonebook</h1>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Name
-            <input
-              type="text"
-              name="name"
-              value={this.state.name}
-              pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-              title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-              required
-              onChange={this.handleInput}
-            />
-          </label>
-          <label>
-            Number
-            <input
-              type="tel"
-              name="number"
-              value={this.state.number}
-              pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-              title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-              required
-              onChange={this.handleInput}
-            />
-          </label>
-          <button type="submit">Add contact</button>
-        </form>
+      <Box width={350} ml='auto' mr='auto' border='1px solid' borderColor='gray' p='20px 20px'>
 
-        <h2>Contacts</h2>
-            <label>
-              Find contacts by name
-              <input
-                type="text"
-                name="filter"
-                value={this.state.filter}
-                onChange={this.handleInput}
-              />
-          </label>
-        <ul>
-          {
-            filteredContacts.map(contact => (
-              <li
-                key={contact.id}
-              >
-                {contact.name}: {contact.number}</li>
-            ))
-          }
-        </ul>
-      </div>
+        <PhonebookTitle>Phonebook</PhonebookTitle>
+
+        {/* Form component */}
+        <Form
+          onSubmit={this.addContact}
+          onInput={this.handleInput} />
+
+        <PnonebookSubtitle>Contacts</PnonebookSubtitle>
+
+        {/* Filter component */}
+        <Filter
+          filter={filter}
+          onInput={this.handleInput} />
+        
+        {/* Contacts list Component */}
+        <ContactList
+          contacts={filteredContacts}
+          onDelete={this.deleteContact}
+        />
+
+      </Box>
     );
   };
   
