@@ -6,20 +6,17 @@ const ContactList = ({ contacts, onDelete }) => {
     return (
         <>
             {contacts.length !== 0 &&
-            <Contacts>
-                {contacts.map(contact => (
-                    <Contact
-                        key={contact.id}
-                        id={contact.id}
-                        name={contact.name}
-                        number={contact.number}
-                        onDelete={onDelete}
-                    />))}
-            </Contacts>}
+                <Contacts>
+                    {contacts.map(({ id, name, number }) => (
+                        <Contact key={id}
+                            id={id}
+                            name={name}
+                            number={number}
+                            onDelete={onDelete}
+                        />))}
+                </Contacts>}
     </>
 )};
-
-export default ContactList;
 
 ContactList.propTypes = {
     contacts: PropTypes.arrayOf(
@@ -31,3 +28,5 @@ ContactList.propTypes = {
     ).isRequired,
     onDelete: PropTypes.func.isRequired,
 };
+
+export default ContactList;

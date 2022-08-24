@@ -25,7 +25,7 @@ export const ContactName = styled.span`
 
     }
 `;
-export const ContacPhone = styled.span`
+export const ContactPhone = styled.span`
     margin-left: 16px;
 `;
 

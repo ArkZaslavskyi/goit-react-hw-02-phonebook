@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import { nanoid } from "nanoid";
 
-import Form from "components/Form";
+import ContactForm from "components/ContactForm";
 import Filter from "components/Filter";
 import ContactList from "components/ContactList";
 import Box from "components/Box";
+
+// utils
+import getFilteredContacts from "utils/getFilteredContacts";
 
 import initialContacts from 'contacts.json';
 import { PhonebookTitle, PnonebookSubtitle } from "./App.styled";
@@ -15,62 +18,42 @@ class App extends Component {
     filter: '',
   }
 
-  addContact = (name, number) => {
-    if (this.isContact(name)) {
+  addContact = ({ name, number }) => {
+    const { contacts } = this.state;
+    
+    if (contacts.find(contact => contact.name === name)) {
       alert(`"${name}" is already in contacts.`)
       return;
     }
 
-    const contact = {
+    const newContact = {
       id: nanoid(),
       name,
       number
     };
 
     this.setState(prevState => ({
-      contacts: [contact, ...prevState.contacts],
+      contacts: [newContact, ...prevState.contacts],
     }));
   }
 
-  isContact = name => {
-    const { contacts } = this.state;
-
-    return contacts.find(contact => contact.name === name);
-  };
-
-  deleteContact = contactId => {
-    const { contacts } = this.state;
-
-    const newList = contacts.filter(contact =>
-      contact.id !== contactId);
-    
-    this.setState({
-      contacts: [...newList],
-    });
+  deleteContact = contactId => {    
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact =>
+        contact.id !== contactId),
+    }));
   };
 
   handleInput = ({ target: { name, value } }) => {
-      // console.log(name);
-      // console.log(value);
       this.setState({
           [name]: value,
       });
   };
   
-  getFilteredContacts = () => {
-    const { contacts, filter } = this.state;
-    const normalizeFilter = filter.trim().toLowerCase();
-
-    return contacts.filter(contact =>
-        contact.name
-          .toLowerCase()
-          .includes(normalizeFilter));
-  }
-
   render() {
 
-    const { filter } = this.state;
-    const filteredContacts = this.getFilteredContacts();
+    const { contacts, filter } = this.state;
+    const filteredContacts = getFilteredContacts(contacts, filter);
 
     return (
       
@@ -79,8 +62,8 @@ class App extends Component {
         <PhonebookTitle>Phonebook</PhonebookTitle>
 
         {/* Form component */}
-        <Form
-          onSubmit={this.addContact}
+        <ContactForm
+          onAddContact={this.addContact}
           onInput={this.handleInput} />
 
         <PnonebookSubtitle>Contacts</PnonebookSubtitle>
