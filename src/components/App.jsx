@@ -18,6 +18,10 @@ class App extends Component {
     filter: '',
   }
 
+  componentDidUpdate() {
+    localStorage.setItem('contacts', JSON.stringify(this.state.contacts))
+  }
+
   addContact = ({ name, number }) => {
     const { contacts } = this.state;
     
@@ -51,8 +55,11 @@ class App extends Component {
   };
   
   render() {
-
     const { contacts, filter } = this.state;
+
+    const localContacts = localStorage.getItem('contacts') ? JSON.parse(localStorage.getItem('contacts')) : this.state.contacts;
+    console.log(localContacts);
+    
     const filteredContacts = getFilteredContacts(contacts, filter);
 
     return (
@@ -64,7 +71,8 @@ class App extends Component {
         {/* Form component */}
         <ContactForm
           onAddContact={this.addContact}
-          onInput={this.handleInput} />
+          // onInput={this.handleInput}
+        />
 
         <PnonebookSubtitle>Contacts</PnonebookSubtitle>
 
